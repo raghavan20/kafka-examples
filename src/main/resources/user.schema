@@ -1,5 +1,5 @@
 {
-    "namespace": "com.test.streams.users",
+    "namespace": "examples",
     "type": "record",
     "name": "User",
     "fields": [

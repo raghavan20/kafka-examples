@@ -22,17 +22,17 @@ public class AvroSampleUsageApp {
         // Create user objects as Generic Record objects
         GenericData.Record user1 = new GenericData.Record(schema);
         user1.put("userId", "user1");
-        user1.put("userName", "user 1");
+        user1.put("userName", "john");
 
         GenericData.Record user2 = new GenericData.Record(schema);
         user2.put("userId", "user2");
-        user2.put("userName", "user 2");
+        user2.put("userName", "steve");
 
         // where to write the output to
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         // avro encode
-        writeToFileAsBinary(schema, user1, user2);
+//        writeToFileAsBinary(schema, user1, user2);
         writeAsJson(out, schema, user1, user2);
     }
 
@@ -47,9 +47,7 @@ public class AvroSampleUsageApp {
         jsonEncoder.flush(); // ensures the data is written to OutputStream
 
         // print serialized JSON
-        byte[] bytes = out.toByteArray();
-        System.out.println("bytes size " + bytes.length);
-        System.out.println(new String(bytes));
+        System.out.println(new String(out.toByteArray()));
     }
 
     private static void writeToFileAsBinary(Schema schema, GenericData.Record... users) throws IOException {
