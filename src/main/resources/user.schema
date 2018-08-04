@@ -1,0 +1,9 @@
+{
+    "namespace": "com.test.streams.users",
+    "type": "record",
+    "name": "User",
+    "fields": [
+        { "name": "userId", "type": "string" },
+        { "name": "userName", "type": "string" }
+    ]
+}
