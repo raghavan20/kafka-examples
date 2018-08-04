@@ -19,6 +19,19 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Schema for Orders is registered with Avro Schema Registry through KafkaAvroSerializer
+ * <p>
+ * ```
+ * curl -s localhost:8081/subjects/topic-orders-value/versions/1 | jq .
+ * {
+ * "subject": "topic-orders-value",
+ * "version": 1,
+ * "id": 21,
+ * "schema": "{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"examples\",\"fields\":[{\"name\":\"orderId\",\"type\":\"string\"},{\"name\":\"userId\",\"type\":\"string\"},{\"name\":\"value\",\"type\":\"int\"}]}"
+ * }```
+ * </p>
+ */
 public class OrderProducerMain {
 
     private static final String TOPIC = "topic-orders";
@@ -31,6 +44,7 @@ public class OrderProducerMain {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        // Does binary encoding with Avro
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         props.put("schema.registry.url", "http://localhost:8081");
 
@@ -43,6 +57,7 @@ public class OrderProducerMain {
                 while (true) {
                     GenericRecord order = generateOrder(schema);
                     String orderId = order.get("orderId").toString();
+                    System.out.println("Creating new order with order id: " + orderId);
                     producer.send(new ProducerRecord<String, GenericRecord>(TOPIC, orderId, order));
                     try {
                         Thread.sleep(10000);
@@ -58,6 +73,7 @@ public class OrderProducerMain {
     }
 
     private static GenericRecord generateOrder(Schema schema) {
+        // each records holds Avro schema for Order
         GenericRecord order = new GenericData.Record(schema);
         order.put("orderId", "order-" + orderCounter.getAndIncrement());
         order.put("userId", userIds.get(random.nextInt(userIds.size()))); // max bound is not included
