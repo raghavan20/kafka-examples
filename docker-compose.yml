@@ -1,0 +1,52 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.0.0
+    volumes:
+      - ~/dev/data/zk-data:/var/lib/zookeeper/data
+      - ~/dev/logs/zk-txn-logs:/var/lib/zookeeper/log
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    ports:
+      - 2181:2181
+  kafka:
+    image: confluentinc/cp-kafka:5.0.0
+    volumes:
+      - ~/dev/data/kafka-data:/var/lib/kafka/data
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    links:
+      - zookeeper
+    ports:
+      - 9092:9092
+  # not tested yet
+#  schema-registry:
+#    image: confluentinc/cp-schema-registry:5.0.0
+#    environment:
+#      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+#      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+#      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
+#      - BOOTSTRAP_SERVERS=PLAINTEXT://kafka:9092
+#    links:
+#      - zookeeper
+#      - kafka
+#    ports:
+#      - 8081:8081
+#  kafka-rest-proxy:
+#    image: confluentinc/cp-kafka-rest:5.0.0
+#    environment:
+#      - BOOTSTRAP_SERVERS=PLAINTEXT://kafka:9092
+#      - KAFKA_REST_ZOOKEEPER_CONNECT=zookeeper:2181
+#      - KAFKA_REST_LISTENERS=http://0.0.0.0:8082
+#      - KAFKA_REST_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+#      - KAFKA_REST_HOST_NAME=kafka-rest
+#    links:
+#      - zookeeper
+#      - kafka
+#      - schema-registry
+#    ports:
+#      - 8082:8082
+

@@ -1,5 +1,6 @@
 package com.test.samples.producers;
 
+import com.test.samples.Commons;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.Metric;
@@ -22,7 +23,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class ProducerMain {
 
-    private static CountDownLatch latch = new CountDownLatch(1);
     private static final String TOPIC = "topic-test";
     private static final int PARTITION = 0;
 
@@ -65,17 +65,8 @@ public class ProducerMain {
         }.start();
 
 
-        waitUntilAppIsAskedToQuit(producer);
+        Commons.waitUntilAppIsAskedToQuit(producer);
     }
 
-    private static void waitUntilAppIsAskedToQuit(Producer<String, String> producer) throws InterruptedException {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                producer.close();
-                latch.countDown();
-            }
-        });
 
-        latch.await();
-    }
 }
