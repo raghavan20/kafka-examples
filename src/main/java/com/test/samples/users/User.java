@@ -1,4 +1,4 @@
-package com.test.samples;
+package com.test.samples.users;
 
 public class User {
     private String id;

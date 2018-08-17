@@ -7,7 +7,6 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
@@ -18,6 +17,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.apache.kafka.clients.producer.ProducerConfig.*;
 
 /**
  * Schema for Orders is registered with Avro Schema Registry through KafkaAvroSerializer
@@ -42,10 +43,10 @@ public class OrderProducerMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         // Does binary encoding with Avro
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        props.put(VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         props.put("schema.registry.url", "http://localhost:8081");
 
 
@@ -69,7 +70,6 @@ public class OrderProducerMain {
         }, "producer-thread").start();
 
         Commons.waitUntilAppIsAskedToQuit(producer);
-
     }
 
     private static GenericRecord generateOrder(Schema schema) {

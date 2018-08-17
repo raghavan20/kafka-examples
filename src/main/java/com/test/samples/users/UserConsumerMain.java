@@ -1,6 +1,6 @@
-package com.test.samples.consumers;
+package com.test.samples.users;
 
-import com.test.samples.User;
+import com.test.samples.users.User;
 import com.test.serde.JsonDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -15,14 +15,14 @@ import java.util.Properties;
 
 import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
 
-public class UserConsumerApp {
+public class UserConsumerMain {
 
     public static final String TOPIC = "topic-users";
 
     public static void main(String[] args) {
         Properties props = new Properties();
         props.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(GROUP_ID_CONFIG, "topc-users-consumer");
+        props.put(GROUP_ID_CONFIG, "topic.users.consumer");
         props.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         // Will be used in deserialising User JSON objects which are stored as value of kafka records
         // Ex: { "id": "user100", "name": "john" }
