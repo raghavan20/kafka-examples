@@ -3,6 +3,7 @@ package com.test.samples.basic;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.time.Instant;
@@ -29,9 +30,9 @@ public class ConsumerManualAssignmentMain {
     props.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     props.put(GROUP_ID_CONFIG, "topic.test.consumer.manual");
     props.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-    props.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+    props.put(VALUE_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
 
-    KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+    KafkaConsumer<String, Long> consumer = new KafkaConsumer<>(props);
 
     TopicPartition topicPartition = new TopicPartition(TOPIC, 0);
 
@@ -43,7 +44,7 @@ public class ConsumerManualAssignmentMain {
 
     while (true) {
       // fetches more than one record if available
-      ConsumerRecords<String, String> records = consumer.poll(5000);
+      ConsumerRecords<String, Long> records = consumer.poll(5000);
 
       System.out.println(">> Obtained records of size: " + records.count());
 

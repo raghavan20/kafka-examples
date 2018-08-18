@@ -42,7 +42,7 @@ public class ConsumerMain {
 
       records.forEach(record -> {
         LocalDateTime dateTime = Instant.ofEpochMilli(record.timestamp()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-        System.out.println(dateTime + " " + record.key() + " " + record.value());
+        System.out.println(record.key() + " " + record.value());
       });
     }
   }

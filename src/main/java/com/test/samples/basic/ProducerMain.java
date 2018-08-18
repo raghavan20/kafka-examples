@@ -25,21 +25,21 @@ public class ProducerMain {
     Properties configs = new Properties();
     configs.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     configs.put(KEY_SERIALIZER_CLASS_CONFIG, Serdes.String().serializer().getClass());
-    configs.put(VALUE_SERIALIZER_CLASS_CONFIG, Serdes.String().serializer().getClass());
+    configs.put(VALUE_SERIALIZER_CLASS_CONFIG, Serdes.Long().serializer().getClass());
 
-    Producer<String, String> producer = new KafkaProducer<String, String>(configs);
+    Producer<String, Long> producer = new KafkaProducer<>(configs);
 
     new Thread() {
       public void run() {
         long counter = 0;
 
         while (true) {
-          ProducerRecord<String, String> record = new ProducerRecord<>(
+          ProducerRecord<String, Long> record = new ProducerRecord<>(
               TOPIC,
               PARTITION,
               System.currentTimeMillis(),
-              "record-key" + counter,
-              "record-value" + counter, Collections.emptyList());
+              "key" + counter,
+              counter, Collections.emptyList());
 
           // sends record asynchronously; does not wait for acknowledgement from Kafka broker (leader of partition)
           Future<RecordMetadata> future = producer.send(record);
